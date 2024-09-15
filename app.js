@@ -5,10 +5,14 @@ const UserRoutes = require('./Routes/UserRoutes');
 const TransactionRoutes = require('./Routes/TransectionRoutes');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
+
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
+
 
 // Middleware
 app.use(express.json());
