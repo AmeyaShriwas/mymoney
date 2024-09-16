@@ -35,23 +35,25 @@ const createUser = async (email, password, number) => {
     await newUser.save();
     await sendOtpEmail(email, otp);
 
-    setTimeout(async()=> {
-       const findUser = await User.findOne({email: email});
-       if(findUser && findUser.isVerified){
-        console.log('user verified')
-       }
-       else{
-        const deleteUser = await User.deleteOne({email: email})
-        console.log('user deleter successfully', deleteUser)
-       }
-    }, 15000)
+    // Set the timer for 15 minutes (900000 milliseconds)
+    setTimeout(async () => {
+      const findUser = await User.findOne({ email: email });
+      
+      // Check if the user is verified
+      if (findUser && findUser.isVerified) {
+        console.log('User verified');
+      } else {
+        // Delete the user if not verified within 15 minutes
+        const deleteUser = await User.deleteOne({ email: email });
+        console.log('User deleted successfully', deleteUser);
+      }
+    }, 900000); // 15 minutes in milliseconds
     
     return { success: true, message: "User registered, OTP sent to email", newUser };
   } catch (error) {
     throw new Error("Failed to create user: " + error.message);
   }
 };
-
 
 // Verify user OTP
 const verifyUserOtp = async (email, otp) => {
