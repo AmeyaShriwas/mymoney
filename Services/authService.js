@@ -34,6 +34,17 @@ const createUser = async (email, password, number) => {
     const newUser = new User({ email, password: hashedPassword, number, otp });
     await newUser.save();
     await sendOtpEmail(email, otp);
+
+    setTimeout(async()=> {
+       const findUser = await User.findOne({email: email});
+       if(findUser && findUser.isVerified){
+        console.log('user verified')
+       }
+       else{
+        const deleteUser = await User.deleteOne({email: email})
+        console.log('user deleter successfully', deleteUser)
+       }
+    }, 15000)
     
     return { success: true, message: "User registered, OTP sent to email", newUser };
   } catch (error) {
